@@ -1,4 +1,23 @@
 # ant-build
+## Build Workflow
+<pre>
+validate
+|-compile
+|--test
+|---package
+|----verify
+</pre>
+### Clean
+Clean the target direcory.
+<pre>
+clean
+</pre>
+### Clean
+Create the php doc.
+<pre>
+phpdoc
+</pre>
+## Use
 To use, create a main xml:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
