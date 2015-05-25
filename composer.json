@@ -1,7 +1,6 @@
 {
   "name": "app3web/ant-build",
   "description": "Build a project with ant and use a parent build config.",
-  "version": "0.0.1-dev",
   "authors": [
     {
       "name": "markus maurer",
