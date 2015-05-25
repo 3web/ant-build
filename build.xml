@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ANT parent project">
+  
+  <target name="validate"
+          description="Validate the project.">
+    <echo message="- validate ant project -------------------------------------------"/>
+    <exec executable="${composerdir}composer${toolsextension}" failonerror="true">
+      <arg value="validate"/>
+    </exec>            
+  </target>  
+  
+  <target name="compile"
+          depends="validate,composer"
+          description="Vaildate source code and install the dependencies.">
+    <echo message="- validate source ------------------------------------------------"/>    
+    <apply executable="php" failonerror="true">
+      <arg value="-l" />
+      <fileset dir="${basedir}/src">
+        <include name="**/*.php" />
+        <modified />
+      </fileset>
+      <fileset dir="${basedir}/tests" erroronmissingdir="false">
+        <include name="**/*.php" />
+        <modified />
+      </fileset>
+    </apply>
+  </target>  
+
+  <target name="test"
+          depends="compile,-notest"
+          if="unitxmldir"
+          description="Execute the unit test.">
+    <echo message="- execute unit tests ---------------------------------------------"/>
+    <mkdir dir="${basedir}/target"/>
+    <exec executable="${toolsdir}phpunit${toolsextension}" failonerror="true">
+      <arg value="--configuration"/>
+      <arg path="${unitxmldir}phpunit.xml.dist"/>
+    </exec>   
+  </target>  
+  
+  <target name="-notest"
+          unless="unitxmldir"
+          description="Execute the unit test.">
+    <echo message="- execute unit tests ---------------------------------------------"/>    
+    <echo message="No tests executed. Configure the 'unitxmldir' property to test." />
+  </target>  
+  
+  <target name="package"
+          depends="test"
+          description="Create a packge.">
+    <echo message="- package the project --------------------------------------------"/>
+    <exec executable="${composerdir}composer${toolsextension}">
+      <arg value="archive"/>
+      <arg value="--format=zip"/>
+      <arg value="--dir=target"/>
+    </exec>    
+  </target>  
+  
+  <!-- target name="integration-test"
+          depends="package"
+          description="Run the integration test.">
+    <echo message="TODO: integration-test"/>
+  </target -->  
+  
+  <target name="verify"
+          depends="package"
+          description="run any checks to verify the package">
+    <echo message="- verify the project ---------------------------------------------"/>
+    <mkdir dir="${basedir}/target/logs"/>    
+    <antcall target="-phploc" />
+    <antcall target="-pdepend" />
+    <antcall target="-phpcs" />
+    <antcall target="-phpcpd" />
+  </target>  
+  
+  <target name="-phploc">
+    <echo message="- execute phploc"/>
+    <exec executable="${toolsdir}phploc${toolsextension}">
+      <arg value="--log-csv" />
+      <arg value="${basedir}/target/logs/phploc.csv" />
+      <arg value="--log-xml" />
+      <arg value="${basedir}/target/logs/phploc.xml" />
+      <arg path="${basedir}/src" />      
+    </exec>    
+  </target>  
+  
+  <target name="-pdepend">
+    <echo message="- execute pdepend"/>
+    <mkdir dir="${basedir}/target/pdepend"/>    
+    <exec executable="${toolsdir}pdepend${toolsextension}">
+      <arg value="--jdepend-xml=${basedir}/target/logs/jdepend.xml" />
+      <arg value="--jdepend-chart=${basedir}/target/pdepend/dependencies.svg" />
+      <arg value="--overview-pyramid=${basedir}/target/pdepend/overview-pyramid.svg" />
+      <arg path="${basedir}/src" />
+    </exec>    
+  </target>  
+  
+  <target name="-phpcs">
+    <echo message="- execute phpcs"/>
+    <exec executable="${toolsdir}phpcs${toolsextension}">
+      <arg value="--standard=PSR2" />
+      <arg value="--extensions=php" />
+      <arg path="${basedir}/src" />
+    </exec>
+    <exec executable="${toolsdir}phpcs${toolsextension}" output="/dev/null">
+      <arg value="--report=checkstyle" />
+      <arg value="--report-file=${basedir}/target/logs/checkstyle.xml" />
+      <arg value="--standard=PSR2" />
+      <arg value="--extensions=php" />
+      <arg path="${basedir}/src" />
+    </exec>
+  </target>  
+  
+  <target name="-phpcpd">
+    <echo message="- execute phpcpd"/>
+    <exec executable="${toolsdir}phpcpd${toolsextension}">
+      <arg path="${basedir}/src" />
+    </exec>
+  </target>  
+  
+  <!-- target name="install"
+          depends="verify">
+    <echo message="install"/>
+  </target -->  
+  
+  <!-- target name="deploy"
+          depends="install"
+          description="Copy the final package in a remote repository.">
+    <scp trust="true"
+         todir="user:password@host:/path">
+      <fileset dir="target">
+        <include name="**/*.zip"/>
+      </fileset>
+    </scp>    
+  </target -->  
+  
+  <target name="clean"
+          unless="clean.done"
+          description="Cleanup build artifacts">
+    <delete dir="${basedir}/target/api"/>
+    <delete dir="${basedir}/target/logs"/>
+    <delete dir="${basedir}/target/pdepend"/>
+    <delete failonerror="false">
+      <fileset dir="${basedir}/target">
+        <include name="**/*.zip" />
+        <include name="**/*.tar" />
+      </fileset>
+    </delete>
+    <property name="clean.done" value="true"/>
+  </target>
+   
+  <!-- set the app extension bat for windows -->
+  <condition property="toolsextension" value=".bat" else="">
+    <os family="windows" />        
+  </condition>
+    
+  <!-- target name="release">
+    <echo message="release" />
+  </target -->    
+  
+  <target name="phpdoc">
+    <echo message="- create the php doc files ---------------------------------------"/>    
+    <mkdir dir="${basedir}/target/api"/>    
+    <exec executable="${toolsdir}apigen${toolsextension}" dir="${basedir}">
+      <arg value="--source"/>
+      <arg path="${basedir}/src"/>            
+      <arg value="--destination"/>
+      <arg path="${basedir}/target/api/html"/>            
+    </exec>
+  </target>
+      
+  <!-- target name="tagging">
+    <exec command="tagging${toolsextension}"/>    
+  </target -->    
+
+</project>

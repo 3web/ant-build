@@ -1,0 +1,20 @@
+{
+  "name": "app3web/ant-build",
+  "description": "Build a project with ant and use a parent build config.",
+  "version": "0.0.1-dev",
+  "authors": [
+    {
+      "name": "markus maurer",
+      "email": "code@3web.ch"
+    }
+  ],
+  "require": {
+    "app3web/unittest": "0.0.*",
+    "squizlabs/php_codesniffer": "2.3.*",
+    "phploc/phploc": "2.1.*",
+    "pdepend/pdepend": "2.0.*",
+    "phpmd/phpmd": "2.2.*",
+    "sebastian/phpcpd": "2.0.*",
+    "apigen/apigen": "4.1.*"
+  }
+}
