@@ -1,6 +1,7 @@
 {
   "name": "app3web/ant-build",
   "description": "Build a project with ant and use a parent build config.",
+  "license": "MIT",
   "authors": [
     {
       "name": "markus maurer",
