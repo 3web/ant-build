@@ -4,9 +4,10 @@
   <target name="validate"
           description="Validate the project.">
     <echo message="- validate ant project -------------------------------------------"/>
-    <exec executable="${composerdir}composer${toolsextension}" failonerror="true">
-      <arg value="validate"/>
-    </exec>            
+    <exec executable="php" failonerror="true">
+        <arg value="composer.phar"/>
+        <arg value="validate"/>
+    </exec>    
   </target>  
   
   <target name="compile"

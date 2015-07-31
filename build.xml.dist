@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PHP Ant build" default="composer">
+
+  <!-- set the composer path -->
+  <property name="composerdir" value=""/>
+  <!-- set the build applications path -->
+  <property name="toolsdir" value="${basedir}/bin/"/>       
+  <!-- set the unit test xml path -->
+  <property name="unitxmldir" value="${basedir}/app/"/>       
+
+  <!-- 
+    import the parent xml 
+  -->
+  <import file="vendor/app3web/ant-build/build.xml" optional="true" />
+
+
+  <target name="-install-composer" description="Install dependencies with Composer">
+      <tstamp>
+          <format property="thirty.days.ago" pattern="MM/dd/yyyy hh:mm aa" offset="-30" unit="day"/>
+      </tstamp>
+      <delete>
+          <fileset dir="${basedir}">
+              <include name="composer.phar" />
+              <date datetime="${thirty.days.ago}" when="before"/>
+          </fileset>
+      </delete>
+      <get src="https://getcomposer.org/composer.phar" dest="${basedir}/composer.phar" skipexisting="true"/>
+  </target>  
+  <!-- 
+    init composer task
+  -->
+  <target name="composer" description="Install dependencies with Composer" depends="-install-composer">
+    <echo message="- execute composer install ---------------------------------------"/>        
+    <exec executable="php">
+        <arg value="composer.phar"/>
+        <arg value="install"/>
+    </exec>    
+  </target>   
+
+</project>
