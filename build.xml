@@ -50,7 +50,7 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
-    <exec executable="${composerdir}composer${toolsextension}">
+    <exec executable="${basedir}composer.phar">
       <arg value="archive"/>
       <arg value="--format=zip"/>
       <arg value="--dir=target"/>
