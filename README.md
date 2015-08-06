@@ -2,10 +2,11 @@
 ## Build Workflow
 <pre>
 validate
-|-compile
-|--test
-|---package
-|----verify
+|-composer
+|--compile
+|---test
+|----package
+|-----verify
 </pre>
 ### Clean
 Clean the target direcory.
