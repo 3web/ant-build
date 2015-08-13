@@ -32,7 +32,7 @@
   <target name="composer" description="Install dependencies with Composer" depends="-install-composer">
     <echo message="- execute composer install ---------------------------------------"/>        
     <exec executable="php">
-        <arg value="composer.phar"/>
+        <arg value="${basedir}/composer.phar"/>
         <arg value="install"/>
     </exec>    
   </target>   

@@ -5,7 +5,7 @@
           description="Validate the project.">
     <echo message="- validate ant project -------------------------------------------"/>
     <exec executable="php" failonerror="true">
-        <arg value="composer.phar"/>
+        <arg value="${basedir}/composer.phar"/>
         <arg value="validate"/>
     </exec>    
   </target>  
@@ -50,7 +50,7 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
-    <exec executable="${basedir}composer.phar">
+    <exec executable="${basedir}/composer.phar">
       <arg value="archive"/>
       <arg value="--format=zip"/>
       <arg value="--dir=target"/>
