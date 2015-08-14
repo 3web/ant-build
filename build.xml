@@ -50,13 +50,14 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
-    <exec executable="${basedir}/composer.phar">
+    <exec executable="php">
+      <arg value="${basedir}/composer.phar"/>
       <arg value="archive"/>
       <arg value="--format=zip"/>
       <arg value="--dir=target"/>
-    </exec>    
-  </target>  
-  
+    </exec>     
+  </target> 
+    
   <!-- target name="integration-test"
           depends="package"
           description="Run the integration test.">
