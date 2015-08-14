@@ -104,7 +104,10 @@
       <arg value="--extensions=php" />
       <arg path="${basedir}/src" />
     </exec>
-    <exec executable="${toolsdir}phpcs${toolsextension}" output="/dev/null">
+    <condition property="output" value="NUL" else="/dev/null">
+      <os family="windows" />        
+    </condition>    
+    <exec executable="${toolsdir}phpcs${toolsextension}" output="${output}">
       <arg value="--report=checkstyle" />
       <arg value="--report-file=${basedir}/target/logs/checkstyle.xml" />
       <arg value="--standard=PSR2" />
