@@ -54,10 +54,10 @@
       <arg value="${basedir}/composer.phar"/>
       <arg value="archive"/>
       <arg value="--format=zip"/>
-      <arg value="--dir=target"/>
+      <arg value="--dir=${basedir}/target"/>
     </exec>     
   </target> 
-    
+
   <!-- target name="integration-test"
           depends="package"
           description="Run the integration test.">
