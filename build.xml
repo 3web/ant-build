@@ -20,7 +20,7 @@
         <include name="**/*.php" />
         <modified />
       </fileset>
-      <fileset dir="${basedir}/tests" erroronmissingdir="false">
+      <fileset dir="${basedir}/test" erroronmissingdir="false">
         <include name="**/*.php" />
         <modified />
       </fileset>
@@ -31,8 +31,8 @@
           depends="compile,-notest"
           if="unitxmldir"
           description="Execute the unit test.">
-    <echo message="- execute unit tests ---------------------------------------------"/>
-    <mkdir dir="${basedir}/target"/>
+    <echo message="- execute unit test ---------------------------------------------"/>
+    <mkdir dir="${basedir}/target/test"/>
     <exec executable="${toolsdir}phpunit${toolsextension}" failonerror="true">
       <arg value="--configuration"/>
       <arg path="${unitxmldir}phpunit.xml.dist"/>
@@ -42,8 +42,8 @@
   <target name="-notest"
           unless="unitxmldir"
           description="Execute the unit test.">
-    <echo message="- execute unit tests ---------------------------------------------"/>    
-    <echo message="No tests executed. Configure the 'unitxmldir' property to test." />
+    <echo message="- execute unit test ---------------------------------------------"/>    
+    <echo message="No test executed. Configure the 'unitxmldir' property to test." />
   </target>  
   
   <target name="package"
@@ -80,7 +80,6 @@
           depends="package"
           description="run any checks to verify the package">
     <echo message="- verify the project ---------------------------------------------"/>
-    <mkdir dir="${basedir}/target/logs"/>    
     <antcall target="-phploc" />
     <antcall target="-pdepend" />
     <antcall target="-phpcs" />
@@ -89,11 +88,12 @@
   
   <target name="-phploc">
     <echo message="- execute phploc"/>
+    <mkdir dir="${basedir}/target/phploc"/>    
     <exec executable="${toolsdir}phploc${toolsextension}">
       <arg value="--log-csv" />
-      <arg value="${basedir}/target/logs/phploc.csv" />
+      <arg value="${basedir}/target/phploc/phploc.csv" />
       <arg value="--log-xml" />
-      <arg value="${basedir}/target/logs/phploc.xml" />
+      <arg value="${basedir}/target/phploc/phploc.xml" />
       <arg path="${basedir}/src" />      
     </exec>    
   </target>  
@@ -102,7 +102,7 @@
     <echo message="- execute pdepend"/>
     <mkdir dir="${basedir}/target/pdepend"/>    
     <exec executable="${toolsdir}pdepend${toolsextension}">
-      <arg value="--jdepend-xml=${basedir}/target/logs/jdepend.xml" />
+      <arg value="--jdepend-xml=${basedir}/target/pdepend/jdepend.xml" />
       <arg value="--jdepend-chart=${basedir}/target/pdepend/dependencies.svg" />
       <arg value="--overview-pyramid=${basedir}/target/pdepend/overview-pyramid.svg" />
       <arg path="${basedir}/src" />
@@ -121,7 +121,7 @@
     </condition>    
     <exec executable="${toolsdir}phpcs${toolsextension}" output="${output}">
       <arg value="--report=checkstyle" />
-      <arg value="--report-file=${basedir}/target/logs/checkstyle.xml" />
+      <arg value="--report-file=${basedir}/target/phpcs/checkstyle.xml" />
       <arg value="--standard=PSR2" />
       <arg value="--extensions=php" />
       <arg path="${basedir}/src" />
@@ -155,8 +155,10 @@
           unless="clean.done"
           description="Cleanup build artifacts">
     <delete dir="${basedir}/target/api"/>
-    <delete dir="${basedir}/target/logs"/>
+    <delete dir="${basedir}/target/test"/>
+    <delete dir="${basedir}/target/phploc"/>
     <delete dir="${basedir}/target/pdepend"/>
+    <delete dir="${basedir}/target/phpcs"/>
     <delete failonerror="false">
       <fileset dir="${basedir}/target">
         <include name="**/*.zip" />
