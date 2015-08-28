@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ANT parent project">
   
-  <target name="validate"
+  <target name="validate" depends="composer"
           description="Validate the project.">
     <echo message="- validate ant project -------------------------------------------"/>
     <exec executable="php" failonerror="true">
@@ -11,7 +11,7 @@
   </target>  
   
   <target name="compile"
-          depends="validate,composer"
+          depends="validate"
           description="Vaildate source code and install the dependencies.">
     <echo message="- validate source ------------------------------------------------"/>    
     <apply executable="php" failonerror="true">
@@ -50,13 +50,25 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
+    <antcall target="-composer" />
     <exec executable="php">
       <arg value="${basedir}/composer.phar"/>
       <arg value="archive"/>
       <arg value="--format=zip"/>
       <arg value="--dir=${basedir}/target"/>
     </exec>     
+    <antcall target="composer" />
   </target> 
+
+  <target name="-composer" description="Remove all dev dependencies and optimize autoloader">
+    <echo message="- execute composer install remove require dev --------------------"/>        
+    <exec executable="php">
+        <arg value="${basedir}/composer.phar"/>
+        <arg value="install"/>
+        <arg value="--no-dev"/>
+        <arg value="--optimize-autoloader"/>
+    </exec>    
+  </target>   
 
   <!-- target name="integration-test"
           depends="package"
