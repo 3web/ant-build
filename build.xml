@@ -111,6 +111,7 @@
   
   <target name="-phpcs">
     <echo message="- execute phpcs"/>
+    <mkdir dir="${basedir}/target/pdepend"/>    
     <exec executable="${toolsdir}phpcs${toolsextension}">
       <arg value="--standard=PSR2" />
       <arg value="--extensions=php" />
