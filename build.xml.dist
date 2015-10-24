@@ -4,9 +4,11 @@
   <!-- set the composer path -->
   <property name="composerdir" value=""/>
   <!-- set the build applications path -->
-  <property name="toolsdir" value="${basedir}/bin/"/>       
+  <property name="toolsdir" value="${basedir}/vendor/bin/"/>       
   <!-- set the unit test xml path -->
-  <property name="unitxmldir" value="${basedir}/app/"/>       
+  <property name="unitxmldir" value="${basedir}/test/"/>       
+  <!-- set the scm url -->
+  <property name="scm" value=".."/>
 
   <!-- 
     import the parent xml 

@@ -1,23 +1,39 @@
 # ant-build
+
+## Composer
+Install the composer dependencies.
+```
+composer
+```
+
 ## Build Workflow
-<pre>
+```
 validate
 |-composer
 |--compile
 |---test
 |----package
 |-----verify
-</pre>
+```
+
 ### Clean
 Clean the target direcory.
-<pre>
+```
 clean
-</pre>
-### Clean
+```
+
+### phpdoc
 Create the php doc.
-<pre>
+```
 phpdoc
-</pre>
+```
+
+## Tagging
+Tag the source code
+```
+tagging
+```
+
 ## Use
 To use, create a main xml:
 
