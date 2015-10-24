@@ -8,8 +8,8 @@ composer
 
 ## Build Workflow
 ```
-validate
-|-composer
+composer
+|-validate
 |--compile
 |---test
 |----package
