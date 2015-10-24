@@ -189,8 +189,6 @@
     </exec>
   </target>
       
-  <!-- target name="tagging">
-    <exec command="tagging${toolsextension}"/>    
-  </target -->    
+  <import file="tagging.xml" optional="true" />   
 
 </project>
