@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="PHP Ant build" default="composer">
+<project name="PHP Ant build" default="composer:install">
 
   <!-- set the composer path -->
   <property name="composerdir" value=""/>

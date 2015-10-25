@@ -57,7 +57,7 @@
       <arg value="--format=zip"/>
       <arg value="--dir=${basedir}/target"/>
     </exec>     
-    <antcall target="composer" />
+    <antcall target="composer:install" />
   </target> 
 
   <target name="-composer" description="Remove all dev dependencies and optimize autoloader">
