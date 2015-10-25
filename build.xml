@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ANT parent project">
+
+  <target name="composer" depends="composer:install">
+    <echo message="Deprecated: Use composer:install or composer:update" />
+  </target>
   
   <target name="validate" depends="-install-composer"
           description="Validate the project.">
@@ -204,7 +208,7 @@
       
   <import file="tagging.xml" optional="true" />   
  
-  <target name="e2e test"
+  <target name="e2e-test"
           depends="-test-xml-checks"
           if="phpe2e.file.found">
     <echo message="- execute e2e test ----------------------------------------------"/>

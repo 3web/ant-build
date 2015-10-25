@@ -1,28 +1,33 @@
 # ant-build
 
-## Composer
+## Composer install
 Install the composer dependencies.
 ```
-composer
+composer:install
+```
+## Composer update
+Update the composer dependencies.
+```
+composer:update
 ```
 
 ## Build Workflow
 ```
-composer
-|-validate
-|--compile
-|---test
-|----package
-|-----verify
+validate
+|compile
+|-test
+|--package
+|---integration-test
+|----verify
 ```
 
-### Clean
+## Clean
 Clean the target direcory.
 ```
 clean
 ```
 
-### phpdoc
+## phpdoc
 Create the php doc.
 ```
 phpdoc
@@ -32,6 +37,12 @@ phpdoc
 Tag the source code
 ```
 tagging
+```
+
+## Ent to end Test
+Run enduser test.
+```
+e2e-test
 ```
 
 ## Use

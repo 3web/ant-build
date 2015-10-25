@@ -38,7 +38,7 @@
         <arg value="install"/>
     </exec>    
   </target>   
-  
+    
   <target name="composer:update" description="Update dependencies with Composer" depends="-install-composer">
     <echo message="- execute composer install ---------------------------------------"/>        
     <exec executable="php">
