@@ -28,8 +28,8 @@
   </target>  
 
   <target name="test"
-          depends="compile,-notest"
-          if="testdir"
+          depends="compile,-test-xml-checks"
+          if="phpunit.file.found"
           description="Execute the unit test.">
     <echo message="- execute unit test ---------------------------------------------"/>
     <mkdir dir="${basedir}/target/test"/>
@@ -38,13 +38,20 @@
       <arg path="${testdir}phpunit.xml.dist"/>
     </exec>   
   </target>  
-  
+
   <target name="-notest"
           unless="testdir"
           description="Execute the unit test.">
     <echo message="- execute unit test ---------------------------------------------"/>    
     <echo message="No test executed. Configure the 'testdir' property to test." />
   </target>  
+
+  <target name="-test-xml-checks" if="testdir" depends="-notest">
+     <available file="${testdir}phpunit.xml.dist"  property="phpunit.file.found"/>
+     <available file="${testdir}phpeint.xml.dist"  property="phpint.file.found"/>
+     <available file="${testdir}phpe2e.xml.dist"  property="phpe2e.file.found"/>
+  </target>
+      
   
   <target name="package"
           depends="test"
@@ -71,8 +78,8 @@
   </target>   
 
   <target name="integration-test"
-          depends="package,-notest"
-          if="testdir"
+          depends="package,-test-xml-checks"
+          if="phpint.file.found"          
           description="Run the integration test.">
     <echo message="- execute integration test --------------------------------------"/>
     <mkdir dir="${basedir}/target/test"/>
@@ -196,10 +203,10 @@
   </target>
       
   <import file="tagging.xml" optional="true" />   
-
+ 
   <target name="e2e test"
-          depends="-notest"
-          if="testdir">
+          depends="-test-xml-checks"
+          if="phpe2e.file.found">
     <echo message="- execute e2e test ----------------------------------------------"/>
     <mkdir dir="${basedir}/target/test"/>
     <exec executable="${toolsdir}phpunit${toolsextension}" failonerror="true">
