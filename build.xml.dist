@@ -6,7 +6,7 @@
   <!-- set the build applications path -->
   <property name="toolsdir" value="${basedir}/vendor/bin/"/>       
   <!-- set the unit test xml path -->
-  <property name="unitxmldir" value="${basedir}/test/"/>       
+  <property name="testdir" value="${basedir}/test/"/>       
   <!-- set the scm url -->
   <property name="scm" value=".."/>
 
@@ -31,11 +31,19 @@
   <!-- 
     init composer task
   -->
-  <target name="composer" description="Install dependencies with Composer" depends="-install-composer">
+  <target name="composer:install" description="Install dependencies with Composer" depends="-install-composer">
     <echo message="- execute composer install ---------------------------------------"/>        
     <exec executable="php">
         <arg value="${basedir}/composer.phar"/>
         <arg value="install"/>
+    </exec>    
+  </target>   
+  
+  <target name="composer:update" description="Update dependencies with Composer" depends="-install-composer">
+    <echo message="- execute composer install ---------------------------------------"/>        
+    <exec executable="php">
+        <arg value="${basedir}/composer.phar"/>
+        <arg value="update"/>
     </exec>    
   </target>   
 
