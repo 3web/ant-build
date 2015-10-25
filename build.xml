@@ -203,6 +203,7 @@
     <echo message="- create the php doc files ---------------------------------------"/>    
     <mkdir dir="${basedir}/target/api"/>    
     <exec executable="${toolsdir}apigen${toolsextension}" dir="${basedir}">
+      <arg value="generate"/>      
       <arg value="--source"/>
       <arg path="${basedir}/src"/>            
       <arg value="--destination"/>
