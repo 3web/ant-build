@@ -33,8 +33,11 @@
   -->
   
   <target name="composer">
-    <echo message="Deprecated: Use composer:install or composer:update" />
-    <antcall target="composer:install" />
+    <echo message="#######################################################" />
+    <echo message="# The composer target is deprecated.                  #" />
+    <echo message="# Use now composer:install or composer:update         #" />
+    <echo message="#######################################################" />
+   <antcall target="composer:install" />
   </target>
   
   <target name="composer:install" description="Install dependencies with Composer" depends="-install-composer">
