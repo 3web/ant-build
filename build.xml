@@ -57,34 +57,24 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
-    <antcall target="-composer:install:no-dev" />
-    <exec executable="php">
-      <arg value="${basedir}/composer.phar"/>
-      <arg value="archive"/>
-      <arg value="--format=zip"/>
-      <arg value="--dir=${basedir}/target"/>
-    </exec>     
-    <antcall target="-composer:install" />
-  </target> 
-
-  <target name="-composer:install:no-dev">
-    <echo message="- execute composer install remove require dev --------------------"/>        
     <exec executable="php">
         <arg value="${basedir}/composer.phar"/>
         <arg value="install"/>
         <arg value="--no-dev"/>
         <arg value="--optimize-autoloader"/>
     </exec>    
-  </target>   
-  
-  <target name="-composer:install">
-    <echo message="- execute composer install ---------------------------------------"/>        
+    <exec executable="php">
+      <arg value="${basedir}/composer.phar"/>
+      <arg value="archive"/>
+      <arg value="--format=zip"/>
+      <arg value="--dir=${basedir}/target"/>
+    </exec>     
     <exec executable="php">
         <arg value="${basedir}/composer.phar"/>
         <arg value="install"/>
-    </exec>    
+    </exec> 
   </target> 
-  
+    
   <target name="integration-test"
           depends="package,-test-xml-checks"
           if="phpint.file.found"          
