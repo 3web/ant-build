@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ANT parent project">
-
-  <target name="composer" depends="composer:install">
-    <echo message="Deprecated: Use composer:install or composer:update" />
-  </target>
-  
+      
   <target name="validate" depends="-install-composer"
           description="Validate the project.">
     <echo message="- validate ant project -------------------------------------------"/>
@@ -61,17 +57,17 @@
           depends="test"
           description="Create a packge.">
     <echo message="- package the project --------------------------------------------"/>
-    <antcall target="-composer" />
+    <antcall target="-composer:install:no-dev" />
     <exec executable="php">
       <arg value="${basedir}/composer.phar"/>
       <arg value="archive"/>
       <arg value="--format=zip"/>
       <arg value="--dir=${basedir}/target"/>
     </exec>     
-    <antcall target="composer:install" />
+    <antcall target="-composer:install" />
   </target> 
 
-  <target name="-composer" description="Remove all dev dependencies and optimize autoloader">
+  <target name="-composer:install:no-dev">
     <echo message="- execute composer install remove require dev --------------------"/>        
     <exec executable="php">
         <arg value="${basedir}/composer.phar"/>
@@ -80,7 +76,15 @@
         <arg value="--optimize-autoloader"/>
     </exec>    
   </target>   
-
+  
+  <target name="-composer:install">
+    <echo message="- execute composer install ---------------------------------------"/>        
+    <exec executable="php">
+        <arg value="${basedir}/composer.phar"/>
+        <arg value="install"/>
+    </exec>    
+  </target> 
+  
   <target name="integration-test"
           depends="package,-test-xml-checks"
           if="phpint.file.found"          

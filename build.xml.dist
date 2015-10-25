@@ -31,6 +31,12 @@
   <!-- 
     init composer task
   -->
+  
+  <target name="composer">
+    <echo message="Deprecated: Use composer:install or composer:update" />
+    <antcall target="composer:install" />
+  </target>
+  
   <target name="composer:install" description="Install dependencies with Composer" depends="-install-composer">
     <echo message="- execute composer install ---------------------------------------"/>        
     <exec executable="php">
