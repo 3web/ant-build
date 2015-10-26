@@ -33,7 +33,7 @@
     <script language="javascript">
       var config = eval("(" + project.getProperty("composer.json") + ")");
       project.setProperty("dev-version", config["version"]);
-      var version = config["version"].replaceAll("^(([0-9]{1,2}.)+([0-9]{1,2}))(.*)$", "$1");
+      var version = config["version"].toString().replaceAll("^(([0-9]{1,2}.)+([0-9]{1,2}))(.*)$", "$1");
       project.setProperty("version", version);
     </script>    
     <echo message="The version nummber is: ${version}" />
@@ -44,7 +44,7 @@
     <script language="javascript">
         var scm = project.getProperty("scm");
         var version = project.getProperty("version");
-        project.setProperty("scm_tag_url", scm.replaceAll("/trunk", "/tags/" + version));
+        project.setProperty("scm_tag_url", scm.toString().replaceAll("/trunk", "/tags/" + version));
     </script>
     <exec executable="svn" failonerror="false" output="${output}" outputproperty="info">
       <arg value="info"/>
@@ -75,12 +75,12 @@
   <target name="-version-number-increment" depends="-version-create">
     <echo message="- version number increment -----------------------------------------"/>
     <script language="javascript">
-        var numbers = project.getProperty("version").split(".");
+        var numbers = project.getProperty("version").toString().split(".");
         number = numbers.pop();
         numbers.push(++number);
         var version = numbers.join(".") + "-dev";
         var config = project.getProperty("composer.json");
-        config = config.replaceAll(project.getProperty("dev-version"), version);      
+        config = config.toString().replaceAll(project.getProperty("dev-version"), version);      
         project.setProperty("composer.json", config);
         project.setProperty("dev-version", version);
     </script>
