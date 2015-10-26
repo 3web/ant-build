@@ -34,7 +34,7 @@ phpdoc
 ```
 
 ## Tagging
-Tag the source code
+Tag the source code. <strong>JDK 8 is required!</strong>
 ```
 tagging
 ```
