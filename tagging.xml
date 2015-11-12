@@ -5,7 +5,7 @@
     <os family="windows" />        
   </condition>  
   
-  <target name="-svn-diff-head" depends="test">
+  <target name="-svn-diff-head" depends="integration-test">
     <echo message="- svn diff to head -----------------------------------------------"/>
     <exec executable="svn" failonerror="true" output="${output}" outputproperty="diff">
       <arg value="diff"/>
