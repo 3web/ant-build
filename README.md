@@ -49,3 +49,12 @@ e2e-test
 To use, create a main xml:
 
 Copy the build.xml.dist as build.xml in project main.
+
+## for a clean arcive
+```
+ "archive": {
+   "exclude": [".DS_Store", ".localized", "thumbs.db", "desktop.ini",
+     "$Recycle.bin", ".git", ".svn", "nbproject/", "*.phar",
+     "target/*", "*.properties", "build.xml"]
+ }  
+```
