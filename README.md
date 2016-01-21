@@ -51,6 +51,7 @@ To use, create a main xml:
 Copy the build.xml.dist as build.xml in project main.
 
 ## for a clean arcive
+Add the following in the composer config. file.
 ```
  "archive": {
    "exclude": [".DS_Store", ".localized", "thumbs.db", "desktop.ini",
