@@ -91,7 +91,7 @@
       numbers.push(++number);
       var version = numbers.join(".") + "-dev";
       var config = project.getProperty("composer.json");
-      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("version")+'",', '"version" : "' + version  + '"');      
+      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("version")+'",', '"version" : "' + version  + '",');      
       project.setProperty("composer.json", config);
       project.setProperty("dev-version", version);
     </script>
