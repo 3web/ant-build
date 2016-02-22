@@ -76,7 +76,7 @@
     <exec executable="svn" failonerror="false" output="${output}" outputproperty="copy">
       <arg value="copy"/>
       <arg value="."/>
-      <arg value="${scm_tag_url}"/>
+      <arg value="${scm_tag_url}/"/>
       <arg value="-m"/>
       <arg value="Creating a new project tag."/>
     </exec>            
