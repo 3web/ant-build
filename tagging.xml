@@ -64,7 +64,7 @@
     <echo message="- version number increment -----------------------------------------"/>
     <script language="javascript">
       var config = project.getProperty("composer.json");
-      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("dev-version")+'",', '"version" : "' + project.getProperty("version")  + '"');      
+      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("dev-version")+'",', '"version" : "' + project.getProperty("version")  + '",');      
       project.setProperty("composer.json", config);
     </script>
     <echo file="composer.json" message="${composer.json}"/>      
