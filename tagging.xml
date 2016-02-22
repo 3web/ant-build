@@ -16,7 +16,7 @@
       <condition>
         <or>
           <not>
-          <equals arg1="${diff}" arg2=""/>
+            <equals arg1="${diff}" arg2=""/>
           </not>
         </or>
       </condition>   
@@ -42,9 +42,9 @@
   <target name="-version-exist" depends="-version-number-infer">
     <echo message="- version exist --------------------------------------------------"/>
     <script language="javascript">
-        var scm = project.getProperty("scm");
-        var version = project.getProperty("version");
-        project.setProperty("scm_tag_url", scm.replaceAll("/trunk", "/tags/" + version));
+      var scm = project.getProperty("scm");
+      var version = project.getProperty("version");
+      project.setProperty("scm_tag_url", scm.replaceAll("/trunk", "/tags/" + version));
     </script>
     <exec executable="svn" failonerror="false" output="${output}" outputproperty="info">
       <arg value="info"/>
@@ -52,15 +52,26 @@
     </exec>    
     <fail message="Version exist.">
       <condition>
-          <not>
+        <not>
           <contains string="${info}" substring="non-existent"/>
-          </not>
+        </not>
       </condition>   
     </fail>    
     <echo message="Version ${scm_tag_url} not exist."/>        
   </target>  
+  
+  <target name="-version-number-update">
+    <echo message="- version number increment -----------------------------------------"/>
+    <script language="javascript">
+      var config = project.getProperty("composer.json");
+      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("dev-version")+'",', '"version" : "' + project.getProperty("version")  + '"');      
+      project.setProperty("composer.json", config);
+    </script>
+    <echo file="composer.json" message="${composer.json}"/>      
+    <echo message="Update the composer.json to ${version} version ."/>      
+  </target>  
 
-  <target name="-version-create" depends="-version-exist">
+  <target name="-version-create" depends="-version-exist,-version-number-update">
     <echo message="- version create --------------------------------------------------"/>
     <exec executable="svn" failonerror="false" output="${output}" outputproperty="copy">
       <arg value="copy"/>
@@ -74,18 +85,20 @@
 
   <target name="-version-number-increment" depends="-version-create">
     <echo message="- version number increment -----------------------------------------"/>
+    <!-- 
     <script language="javascript">
-        var numbers = project.getProperty("version").split(".");
-        number = numbers.pop();
-        numbers.push(++number);
-        var version = numbers.join(".") + "-dev";
-        var config = project.getProperty("composer.json");
-        config = config.replaceAll(project.getProperty("dev-version"), version);      
-        project.setProperty("composer.json", config);
-        project.setProperty("dev-version", version);
+      var numbers = project.getProperty("version").split(".");
+      number = numbers.pop();
+      numbers.push(++number);
+      var version = numbers.join(".") + "-dev";
+      var config = project.getProperty("composer.json");
+      config = config.replaceAll('"version"([ ]*):([ ]*)"'+project.getProperty("version")+'",', '"version" : "' + version  + '"');      
+      project.setProperty("composer.json", config);
+      project.setProperty("dev-version", version);
     </script>
     <echo file="composer.json" message="${composer.json}"/>      
     <echo message="Update the composer.json to ${dev-version} version ."/>      
+    -->
   </target>  
 
   <target name="-config-commit" depends="-version-number-increment">
