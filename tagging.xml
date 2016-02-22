@@ -85,7 +85,6 @@
 
   <target name="-version-number-increment" depends="-version-create">
     <echo message="- version number increment -----------------------------------------"/>
-    <!-- 
     <script language="javascript">
       var numbers = project.getProperty("version").split(".");
       number = numbers.pop();
@@ -98,19 +97,16 @@
     </script>
     <echo file="composer.json" message="${composer.json}"/>      
     <echo message="Update the composer.json to ${dev-version} version ."/>      
-    -->
   </target>  
 
   <target name="-config-commit" depends="-version-number-increment">
     <echo message="- config commit ----------------------------------------------------"/>    
-    <!-- 
     <exec executable="svn" failonerror="true" output="${output}" outputproperty="commit">
       <arg value="commit"/>
       <arg value="-m"/>
       <arg value="Commit the new dev config."/>
     </exec>            
     <echo message="The configuration file is commited."/>       
-    -->    
   </target>  
   
   <target name="tagging" depends="-config-commit"/>
