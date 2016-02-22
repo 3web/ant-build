@@ -85,7 +85,6 @@
 
   <target name="-version-number-increment" depends="-version-create">
     <echo message="- version number increment -----------------------------------------"/>
-    <!-- 
     <script language="javascript">
       var numbers = project.getProperty("version").split(".");
       number = numbers.pop();
@@ -98,7 +97,6 @@
     </script>
     <echo file="composer.json" message="${composer.json}"/>      
     <echo message="Update the composer.json to ${dev-version} version ."/>      
-    -->
   </target>  
 
   <target name="-config-commit" depends="-version-number-increment">
