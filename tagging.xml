@@ -109,6 +109,8 @@
     <echo message="The configuration file is commited."/>       
   </target>  
   
-  <target name="tagging" depends="-config-commit"/>
+  <target name="tagging" depends="-config-commit">
+
+  </target>
   
 </project>
