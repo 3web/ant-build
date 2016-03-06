@@ -8,16 +8,6 @@
   <target name="-diff2head" >
     <echo message="- diff to head ---------------------------------------------------"/>
     <antcall target="-diff" />
-    <fail message="Not all changes commited.">
-      <condition>
-        <or>
-          <not>
-            <equals arg1="${diff}" arg2=""/>
-          </not>
-        </or>
-      </condition>
-    </fail>
-    <echo message="All changes commited. ${diff}"/>
   </target>
 
   <target name="-version-number-infer" depends="-diff2head">
@@ -80,15 +70,10 @@
     </condition>
   </target>
 
-  <target name="-vcs-svn" unless="vcsgit">
-    <import file="svn.xml"/>
-  </target>
+  <import file="svn.xml" />
+  <import file="git.xml" />
 
-  <target name="-vcs-git" if="vcsgit">
-    <import file="git.xml"/>
-  </target>
-
-  <target name="tagging" depends="-vcs-type,-vcs-svn,-vcs-git">
+  <target name="tagging" depends="-vcs-type">
       <antcall target="-config-commit" />
   </target>
   

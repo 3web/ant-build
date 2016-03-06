@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="VCS git tagging">
     
-  <condition property="output" value="NUL" else="/dev/null">
-    <os family="windows" />        
-  </condition>
-
-  <target name="-diff">
+  <target name="-diff" if="vcsgit">
     <exec executable="git" failonerror="true" output="${output}" outputproperty="diff">
       <arg value="diff"/>
       <arg value="--name-status"/>
       <arg value="HEAD"/>
-    </exec>    
+    </exec>
+    <fail message="Not all changes commited.">
+      <condition>
+        <or>
+          <not>
+            <equals arg1="${diff}" arg2=""/>
+          </not>
+        </or>
+      </condition>
+    </fail>
+    <echo message="All changes commited. ${diff}"/>
   </target>
 
-  <target name="-info">
+  <target name="-info" if="vcsgit">
     <exec executable="git" failonerror="false" output="${output}" outputproperty="info">
-      <arg value="tag"/>
+      <arg value="ls-remote"/>
+      <arg value="--tags"/>
     </exec>
     <fail message="Version exist.">
       <condition>
-        <not>
-          <contains string="${info}" substring="${version}"/>
-        </not>
+        <contains string="${info}" substring="${version}"/>
       </condition>
     </fail>
     <echo message="Version ${version} not exist."/>
   </target>
 
-  <target name="-copy">
+  <target name="-copy" if="vcsgit">
     <exec executable="git" failonerror="false" output="${output}" outputproperty="tag">
       <arg value="tag"/>
-      <arg value="-s"/>
+      <arg value="-a"/>
       <arg value="${version}"/>
       <arg value="-m"/>
       <arg value="Creating a new project tag."/>
@@ -44,10 +49,10 @@
     <echo message="${copy}"/>
   </target>
 
-  <target name="-commit">
+  <target name="-commit" if="vcsgit">
     <exec executable="git" failonerror="true" output="${output}" outputproperty="commit-local">
       <arg value="commit"/>
-      <arg value="-m"/>
+      <arg value="-am"/>
       <arg value="Commit the new dev config."/>
     </exec>
     <echo message="The configuration file is commited."/>

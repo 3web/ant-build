@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="VCS svn tagging">
-    
-  <condition property="output" value="NUL" else="/dev/null">
-    <os family="windows" />        
-  </condition>
 
   <target name="-diff">
     <exec executable="svn" failonerror="true" output="${output}" outputproperty="diff">
       <arg value="diff"/>
       <arg value="-r"/>
       <arg value="head"/>
-    </exec>    
+    </exec>
+    <fail message="Not all changes commited.">
+      <condition>
+        <or>
+          <not>
+            <equals arg1="${diff}" arg2=""/>
+          </not>
+        </or>
+      </condition>
+    </fail>
+    <echo message="All changes commited. ${diff}"/>
   </target>
 
   <target name="-info">
