@@ -3,15 +3,11 @@
     
   <condition property="output" value="NUL" else="/dev/null">
     <os family="windows" />        
-  </condition>  
-  
-  <target name="-svn-diff-head" depends="integration-test">
-    <echo message="- svn diff to head -----------------------------------------------"/>
-    <exec executable="svn" failonerror="true" output="${output}" outputproperty="diff">
-      <arg value="diff"/>
-      <arg value="-r"/>
-      <arg value="head"/>
-    </exec>    
+  </condition>
+  <!-- TODO: depends="integration-test" -->
+  <target name="-diff2head" >
+    <echo message="- diff to head ---------------------------------------------------"/>
+    <antcall target="-diff" />
     <fail message="Not all changes commited.">
       <condition>
         <or>
@@ -19,48 +15,29 @@
             <equals arg1="${diff}" arg2=""/>
           </not>
         </or>
-      </condition>   
-    </fail>    
+      </condition>
+    </fail>
     <echo message="All changes commited. ${diff}"/>
-  </target>  
-      
-  <target name="-version-number-infer" depends="-svn-diff-head">
+  </target>
+
+  <target name="-version-number-infer" depends="-diff2head">
     <echo message="- version number infer -------------------------------------------"/>
-    <loadfile
-      property="composer.json"
-      srcFile="composer.json"
-      failonerror="false"/> 
+    <loadfile property="composer.json" srcFile="composer.json" failonerror="false"/>
     <script language="javascript">
       var config = eval("(" + project.getProperty("composer.json") + ")");
       project.setProperty("dev-version", config["version"]);
       var version = config["version"].replaceAll("^(([0-9]{1,2}.)+([0-9]{1,2}))(.*)$", "$1");
       project.setProperty("version", version);
-    </script>    
+    </script>
     <echo message="The version nummber is: ${version}" />
-  </target>  
+  </target>
 
   <target name="-version-exist" depends="-version-number-infer">
     <echo message="- version exist --------------------------------------------------"/>
-    <script language="javascript">
-      var scm = project.getProperty("scm");
-      var version = project.getProperty("version");
-      project.setProperty("scm_tag_url", scm.replaceAll("/trunk", "/tags/" + version));
-    </script>
-    <exec executable="svn" failonerror="false" output="${output}" outputproperty="info">
-      <arg value="info"/>
-      <arg value="${scm_tag_url}"/>
-    </exec>    
-    <fail message="Version exist.">
-      <condition>
-        <not>
-          <contains string="${info}" substring="non-existent"/>
-        </not>
-      </condition>   
-    </fail>    
-    <echo message="Version ${scm_tag_url} not exist."/>        
-  </target>  
+    <antcall target="-info" />
+  </target>
   
-  <target name="-version-number-update">
+  <target name="-version-number-update" depends="-version-exist">
     <echo message="- version number increment -----------------------------------------"/>
     <script language="javascript">
       var config = project.getProperty("composer.json");
@@ -71,17 +48,10 @@
     <echo message="Update the composer.json to ${version} version ."/>      
   </target>  
 
-  <target name="-version-create" depends="-version-exist,-version-number-update">
+  <target name="-version-create" depends="-version-number-update">
     <echo message="- version create --------------------------------------------------"/>
-    <exec executable="svn" failonerror="false" output="${output}" outputproperty="copy">
-      <arg value="copy"/>
-      <arg value="."/>
-      <arg value="${scm_tag_url}/"/>
-      <arg value="-m"/>
-      <arg value="Creating a new project tag."/>
-    </exec>            
-    <echo message="${copy}"/>      
-  </target>  
+    <antcall target="-copy" />
+  </target>
 
   <target name="-version-number-increment" depends="-version-create">
     <echo message="- version number increment -----------------------------------------"/>
@@ -100,17 +70,26 @@
   </target>  
 
   <target name="-config-commit" depends="-version-number-increment">
-    <echo message="- config commit ----------------------------------------------------"/>    
-    <exec executable="svn" failonerror="true" output="${output}" outputproperty="commit">
-      <arg value="commit"/>
-      <arg value="-m"/>
-      <arg value="Commit the new dev config."/>
-    </exec>            
-    <echo message="The configuration file is commited."/>       
-  </target>  
-  
-  <target name="tagging" depends="-config-commit">
+    <echo message="- config commit ----------------------------------------------------"/>
+    <antcall target="-commit" />
+  </target>
 
+  <target name="-vcs-type">
+    <condition property="vcsgit">
+      <matches string="${scm}" pattern="^(.+)\.git$"/>
+    </condition>
+  </target>
+
+  <target name="-vcs-svn" unless="vcsgit">
+    <import file="svn.xml"/>
+  </target>
+
+  <target name="-vcs-git" if="vcsgit">
+    <import file="git.xml"/>
+  </target>
+
+  <target name="tagging" depends="-vcs-type,-vcs-svn,-vcs-git">
+      <antcall target="-config-commit" />
   </target>
   
 </project>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="VCS git tagging">
+    
+  <condition property="output" value="NUL" else="/dev/null">
+    <os family="windows" />        
+  </condition>
+
+  <target name="-diff">
+    <exec executable="git" failonerror="true" output="${output}" outputproperty="diff">
+      <arg value="diff"/>
+      <arg value="--name-status"/>
+      <arg value="HEAD"/>
+    </exec>    
+  </target>
+
+  <target name="-info">
+    <exec executable="git" failonerror="false" output="${output}" outputproperty="info">
+      <arg value="tag"/>
+    </exec>
+    <fail message="Version exist.">
+      <condition>
+        <not>
+          <contains string="${info}" substring="${version}"/>
+        </not>
+      </condition>
+    </fail>
+    <echo message="Version ${version} not exist."/>
+  </target>
+
+  <target name="-copy">
+    <exec executable="git" failonerror="false" output="${output}" outputproperty="tag">
+      <arg value="tag"/>
+      <arg value="-s"/>
+      <arg value="${version}"/>
+      <arg value="-m"/>
+      <arg value="Creating a new project tag."/>
+    </exec>
+    <echo message="${tag}"/>
+    <exec executable="git" failonerror="false" output="${output}" outputproperty="copy">
+      <arg value="push"/>
+      <arg value="origin"/>
+      <arg value="${version}"/>
+    </exec>
+    <echo message="${copy}"/>
+  </target>
+
+  <target name="-commit">
+    <exec executable="git" failonerror="true" output="${output}" outputproperty="commit-local">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Commit the new dev config."/>
+    </exec>
+    <echo message="The configuration file is commited."/>
+    <exec executable="git" failonerror="false" output="${output}" outputproperty="commit">
+      <arg value="push"/>
+    </exec>
+    <echo message="The configuration file is pushed."/>
+  </target>
+
+</project>

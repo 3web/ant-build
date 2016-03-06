@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="VCS svn tagging">
+    
+  <condition property="output" value="NUL" else="/dev/null">
+    <os family="windows" />        
+  </condition>
+
+  <target name="-diff">
+    <exec executable="svn" failonerror="true" output="${output}" outputproperty="diff">
+      <arg value="diff"/>
+      <arg value="-r"/>
+      <arg value="head"/>
+    </exec>    
+  </target>
+
+  <target name="-info">
+    <script language="javascript">
+      var scm = project.getProperty("scm");
+      var version = project.getProperty("version");
+      project.setProperty("scm_tag_url", scm.replaceAll("/trunk", "/tags/" + version));
+    </script>
+    <exec executable="svn" failonerror="false" output="${output}" outputproperty="info">
+      <arg value="info"/>
+      <arg value="${scm_tag_url}"/>
+    </exec>
+    <fail message="Version exist.">
+      <condition>
+        <not>
+          <contains string="${info}" substring="non-existent"/>
+        </not>
+      </condition>
+    </fail>
+    <echo message="Version ${scm_tag_url} not exist."/>
+  </target>
+
+  <target name="-copy">
+    <exec executable="svn" failonerror="false" output="${output}" outputproperty="copy">
+      <arg value="copy"/>
+      <arg value="."/>
+      <arg value="${scm_tag_url}/"/>
+      <arg value="-m"/>
+      <arg value="Creating a new project tag."/>
+    </exec>
+    <echo message="${copy}"/>
+  </target>
+
+  <target name="-commit">
+    <exec executable="svn" failonerror="true" output="${output}" outputproperty="commit">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Commit the new dev config."/>
+    </exec>
+    <echo message="The configuration file is commited."/>
+  </target>
+
+</project>
