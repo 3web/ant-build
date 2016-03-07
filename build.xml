@@ -201,7 +201,7 @@
     </exec>
   </target>
       
-  <import file="tagging/tagging.xml" optional="true" />
+  <import file="tagging/tagging.xml" />
  
   <target name="e2e-test"
           depends="-test-xml-checks"

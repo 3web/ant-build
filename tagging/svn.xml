@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="VCS svn tagging">
+<project name="svn">
 
-  <target name="-diff">
-    <exec executable="svn" failonerror="true" output="${output}" outputproperty="diff">
+  <target name="diff" unless="vcsgit">
+    <echo message="SVN diff"/>
+    <exec executable="svn" failonerror="false" output="${output}" outputproperty="diff">
       <arg value="diff"/>
       <arg value="-r"/>
       <arg value="head"/>
@@ -19,7 +20,7 @@
     <echo message="All changes commited. ${diff}"/>
   </target>
 
-  <target name="-info">
+  <target name="info" unless="vcsgit">
     <script language="javascript">
       var scm = project.getProperty("scm");
       var version = project.getProperty("version");
@@ -39,7 +40,7 @@
     <echo message="Version ${scm_tag_url} not exist."/>
   </target>
 
-  <target name="-copy">
+  <target name="copy" unless="vcsgit">
     <exec executable="svn" failonerror="false" output="${output}" outputproperty="copy">
       <arg value="copy"/>
       <arg value="."/>
@@ -50,7 +51,7 @@
     <echo message="${copy}"/>
   </target>
 
-  <target name="-commit">
+  <target name="commit" unless="vcsgit">
     <exec executable="svn" failonerror="true" output="${output}" outputproperty="commit">
       <arg value="commit"/>
       <arg value="-m"/>

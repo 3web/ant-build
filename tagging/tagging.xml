@@ -4,10 +4,11 @@
   <condition property="output" value="NUL" else="/dev/null">
     <os family="windows" />        
   </condition>
-  <!-- TODO: depends="integration-test" -->
-  <target name="-diff2head" >
+
+  <target name="-diff2head" depends="integration-test">
     <echo message="- diff to head ---------------------------------------------------"/>
-    <antcall target="-diff" />
+    <antcall target="git.diff" />
+    <antcall target="svn.diff" />
   </target>
 
   <target name="-version-number-infer" depends="-diff2head">
@@ -24,7 +25,8 @@
 
   <target name="-version-exist" depends="-version-number-infer">
     <echo message="- version exist --------------------------------------------------"/>
-    <antcall target="-info" />
+    <antcall target="git.info" />
+    <antcall target="svn.info" />
   </target>
   
   <target name="-version-number-update" depends="-version-exist">
@@ -40,7 +42,8 @@
 
   <target name="-version-create" depends="-version-number-update">
     <echo message="- version create --------------------------------------------------"/>
-    <antcall target="-copy" />
+    <antcall target="git.copy" />
+    <antcall target="svn.copy" />
   </target>
 
   <target name="-version-number-increment" depends="-version-create">
@@ -61,7 +64,8 @@
 
   <target name="-config-commit" depends="-version-number-increment">
     <echo message="- config commit ----------------------------------------------------"/>
-    <antcall target="-commit" />
+    <antcall target="git.commit" />
+    <antcall target="svn.commit" />
   </target>
 
   <target name="-vcs-type">
@@ -70,11 +74,9 @@
     </condition>
   </target>
 
-  <import file="svn.xml" />
-  <import file="git.xml" />
+  <include file="svn.xml" />
+  <include file="git.xml" />
 
-  <target name="tagging" depends="-vcs-type">
-      <antcall target="-config-commit" />
-  </target>
-  
+  <target name="tagging" depends="-vcs-type,-config-commit" />
+
 </project>

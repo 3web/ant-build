@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="VCS git tagging">
+<project name="git">
     
-  <target name="-diff" if="vcsgit">
+  <target name="diff" if="vcsgit">
+    <echo message="GIT diff"/>
     <exec executable="git" failonerror="true" output="${output}" outputproperty="diff">
       <arg value="diff"/>
       <arg value="--name-status"/>
@@ -19,7 +20,8 @@
     <echo message="All changes commited. ${diff}"/>
   </target>
 
-  <target name="-info" if="vcsgit">
+  <target name="info" if="vcsgit">
+    <echo message="GIT remote tags"/>
     <exec executable="git" failonerror="false" output="${output}" outputproperty="info">
       <arg value="ls-remote"/>
       <arg value="--tags"/>
@@ -32,7 +34,8 @@
     <echo message="Version ${version} not exist."/>
   </target>
 
-  <target name="-copy" if="vcsgit">
+  <target name="copy" if="vcsgit">
+    <echo message="GIT create tag"/>
     <exec executable="git" failonerror="false" output="${output}" outputproperty="tag">
       <arg value="tag"/>
       <arg value="-a"/>
@@ -49,7 +52,8 @@
     <echo message="${copy}"/>
   </target>
 
-  <target name="-commit" if="vcsgit">
+  <target name="commit" if="vcsgit">
+    <echo message="GIT commit"/>
     <exec executable="git" failonerror="true" output="${output}" outputproperty="commit-local">
       <arg value="commit"/>
       <arg value="-am"/>
