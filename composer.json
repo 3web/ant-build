@@ -2,7 +2,7 @@
   "name": "app3web/ant-build",
   "description": "Build a project with ant and use a parent build config.",
   "license": "MIT",
-  "version": "0.3.8-dev",
+  "version": "1.0.0-dev",
   "authors": [
     {
       "name": "markus maurer",
@@ -11,7 +11,7 @@
   ],
   "require": {
     "phpunit/phpunit": "4.2.*",
-    "facebook/webdriver": "1.0.2",
+    "facebook/webdriver": "1.0.*",
     "phpunit/phpunit-skeleton-generator": "2.0.*",
     "squizlabs/php_codesniffer": "2.3.*",
     "phploc/phploc": "2.1.*",
