@@ -52,10 +52,15 @@
     </exec>    
     <fail message="Version exist.">
       <condition>
-        <not>
-          <contains string="${info}" substring="non-existent"/>
-        </not>
-      </condition>   
+        <and>
+          <not>
+            <contains string="${info}" substring="non-existent"/>
+          </not>
+          <not>
+            <contains string="${info}" substring="(Not a valid URL)"/>
+          </not>
+        </and>
+      </condition>
     </fail>    
     <echo message="Version ${scm_tag_url} not exist."/>        
   </target>  
